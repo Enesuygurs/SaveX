@@ -23,6 +23,12 @@ document.getElementById('deleteBtn').addEventListener('click', async () => {
   showModal('Siliniyor');
 });
 
+function setDeleteEnabled(enabled) {
+  const del = document.getElementById('deleteBtn');
+  if (!del) return;
+  del.disabled = !enabled;
+}
+
 document.getElementById('settingsBtn').addEventListener('click', () => {
   showModal('Ayarlar yakında!');
 });
@@ -32,8 +38,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (!message || !message.action) return;
   if (message.action === 'site-saved') {
     showModal('Kaydedildi');
+    setDeleteEnabled(true);
   } else if (message.action === 'site-deleted') {
     showModal('Silindi');
+    setDeleteEnabled(false);
   } else if (message.action === 'site-error') {
     // Map common reasons to user-friendly messages
     const reason = message.reason || '';
@@ -46,21 +54,34 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     } else {
       showModal(message.message || 'Bir hata oluştu');
     }
+    // if the error relates to unsupported url or storage, ensure delete disabled
+    if (message.reason === 'unsupported_url' || message.reason === 'storage_error') {
+      setDeleteEnabled(false);
+    }
   }
 });
 
 // On popup open, check if current tab was loaded from saved data
 document.addEventListener('DOMContentLoaded', () => {
+  // disable delete by default until we check storage
+  setTimeout(() => setDeleteEnabled(false), 0);
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const tab = tabs && tabs[0];
     if (!tab || !tab.url) return;
+    const siteKey = 'site_' + tab.url;
     const key = 'loaded_from_saved_' + tab.url;
+    // check if loaded from saved
     chrome.storage.local.get(key, (res) => {
       if (res && res[key]) {
         showModal('Site kayıttan yüklendi');
         // clear the flag so message shows only once
         chrome.storage.local.remove(key);
       }
+    });
+    // check if a saved site exists for this URL to enable delete button
+    chrome.storage.local.get(siteKey, (res) => {
+      if (res && res[siteKey]) setDeleteEnabled(true);
+      else setDeleteEnabled(false);
     });
   });
 });
