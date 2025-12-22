@@ -1,0 +1,49 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #181c24;
+  color: #fff;
+  min-width: 260px;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, #2b5876 0%, #4e4376 100%);
+  padding: 12px 16px;
+  border-radius: 0 0 12px 12px;
+}
+.app-name {
+  font-size: 1.2em;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+.settings-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 8px;
+}
+.main-btn {
+  width: 90%;
+  margin: 16px 5% 0 5%;
+  padding: 10px 0;
+  font-size: 1em;
+  border: none;
+  border-radius: 8px;
+  background: #2b5876;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.main-btn:hover {
+  background: #4e4376;
+}
+.delete {
+  background: #b22234;
+  margin-top: 8px;
+}
+.delete:hover {
+  background: #ff4b5c;
+}

@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "SaveX",
+  "version": "1.0",
+  "description": "Siteleri kaydedip, kaydedilmiş haliyle tekrar açan bir Chrome eklentisi.",
+  "permissions": [
+    "storage",
+    "scripting",
+    "activeTab",
+    "webNavigation",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "background_scripts": ["webNavigation.js"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "32": "icon32.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["saved_sites/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
