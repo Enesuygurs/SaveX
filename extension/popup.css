@@ -162,10 +162,51 @@ html,body{
   box-shadow:0 8px 24px rgba(2,6,23,0.12);
   text-align:center;
 }
+.modal-card.settings-open{
+  padding:0; /* allow topbar to span edge-to-edge */
+  border-radius:12px;
+  min-width:320px;
+  overflow:hidden;
+}
 .modal-text{
   color:var(--text);
   font-weight:600;
 }
 .modal-actions{
   margin-top:12px;
+}
+
+/* Settings content inside modal */
+.settings-content{
+  text-align:left;
+  max-width:360px;
+  padding:16px; /* inner padding when modal-card has no padding */
+}
+.settings-topbar{
+  background: var(--primary);
+  color: #fff;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 16px;
+}
+.settings-topbar .title{color:#fff}
+.settings-topbar .icon-btn .icon{color:#fff}
+.settings-content h3{
+  margin:0 0 8px 0;
+  font-size:16px;
+}
+.settings-row{
+  margin-top:10px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+.settings-row input[type="file"]{
+  flex:1;
+}
+.settings-note{
+  margin-top:10px;
+  font-size:12px;
+  color:rgba(100,100,100,0.9);
 }
