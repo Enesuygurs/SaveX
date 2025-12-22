@@ -9,10 +9,14 @@ function showModal(message) {
   modal.setAttribute('aria-hidden', 'false');
 }
 
-function showStatusMessage(message, timeout = 5000) {
+function showStatusMessage(message, timestamp = null, timeout = 5000) {
   const el = document.getElementById('statusMessage');
   if (!el) return;
-  el.textContent = message;
+  if (timestamp) {
+    el.innerHTML = `<div class="msg-line">${message}</div><div class="timestamp">${timestamp}</div>`;
+  } else {
+    el.textContent = message;
+  }
   el.style.display = 'block';
   el.setAttribute('aria-hidden', 'false');
   if (timeout > 0) {
@@ -91,10 +95,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!tab || !tab.url) return;
     const siteKey = 'site_' + tab.url;
     const key = 'loaded_from_saved_' + tab.url;
-    // check if loaded from saved
+    // check if loaded from saved (key stores ISO timestamp)
     chrome.storage.local.get(key, (res) => {
-      if (res && res[key]) {
-        showStatusMessage('Site kayıttan yüklendi', 6000);
+      const ts = res && res[key];
+      if (ts) {
+        // format timestamp to DD.MM.YYYY HH:MM
+        try {
+          const d = new Date(ts);
+          const pad = (n) => String(n).padStart(2, '0');
+            const formatted = `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+            // show message with timestamp on next line and keep it persistent (timeout=0)
+            showStatusMessage('Site kayıttan yüklendi', `${formatted}`, 0);
+        } catch (e) {
+            showStatusMessage('Site kayıttan yüklendi', null, 0);
+        }
         // clear the flag so message shows only once
         chrome.storage.local.remove(key);
       }
