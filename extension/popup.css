@@ -51,7 +51,7 @@ html,body{
   /* keep full-width appearance while container has horizontal padding */
   width: calc(100% + 32px);
   margin-left: -16px;
-  padding:10px 0; /* no horizontal padding */
+  padding:10px 16px; /* horizontal padding for title and settings button */
   border-radius:0; /* remove rounded corners */
   box-shadow: 0 4px 12px rgba(37,99,235,0.12);
 }
