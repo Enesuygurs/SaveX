@@ -16,10 +16,6 @@
   "background": {
     "service_worker": "background.js"
   },
-  "background": {
-    "service_worker": "background.js"
-  },
-  "background_scripts": ["webNavigation.js"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {

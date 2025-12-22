@@ -27,8 +27,6 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     });
   }
 });
-// Service worker for SaveX extension
-
 
 chrome.runtime.onInstalled.addListener(() => {
   // Initialization logic if needed
@@ -53,4 +51,32 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       });
     });
   }
+  if (msg.action === 'delete-current-site') {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const tab = tabs[0];
+      if (!tab || !tab.url) return;
+      chrome.storage.local.remove('site_' + tab.url, () => {
+        chrome.runtime.sendMessage({ action: 'site-deleted', url: tab.url });
+      });
+    });
+  }
+});
+
+// Intercept navigation and show saved site if exists
+chrome.webNavigation.onCommitted.addListener(async (details) => {
+  if (details.frameId !== 0) return; // Only main frame
+  const url = details.url;
+  chrome.storage.local.get('site_' + url, (result) => {
+    if (result && result['site_' + url]) {
+      chrome.scripting.executeScript({
+        target: { tabId: details.tabId },
+        func: (html) => {
+          document.open();
+          document.write(html);
+          document.close();
+        },
+        args: [result['site_' + url]]
+      });
+    }
+  });
 });
