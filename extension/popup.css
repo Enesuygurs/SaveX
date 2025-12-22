@@ -94,12 +94,21 @@ html,body{
   text-align:center;
 }
 
+.status-message.error{
+  background: rgba(239,68,68,0.12); /* subtle red */
+  color: #dc2626; /* dark red */
+}
+
 .status-message .timestamp{
   display:block;
   font-weight:500;
   font-size:12px;
   color: rgba(6,95,70,0.9);
   margin-top:6px;
+}
+
+.status-message.error .timestamp{
+  color: rgba(220,38,38,0.9);
 }
 
 .btn{
