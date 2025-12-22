@@ -3,23 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <title>SaveX</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-  <div class="header">
-    <span class="app-name">SaveX</span>
-    <button class="settings-btn" id="settingsBtn" title="Ayarlar">
-      <svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" stroke="#fff" stroke-width="2" fill="none"/><path d="M10 6v4l2 2" stroke="#fff" stroke-width="2" fill="none"/></svg>
-    </button>
+  <div class="container">
+    <header class="topbar">
+      <div class="title">SaveX</div>
+      <button id="settingsBtn" class="icon-btn" title="Ayarlar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 15.5A3.5 3.5 0 1012 8.5a3.5 3.5 0 000 7z" stroke="#111" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06A2 2 0 014.27 17.9l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82L4.27 4.27A2 2 0 017.1 1.44l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09c.12.62.58 1.14 1.2 1.4.62.26 1.31.18 1.82-.33l.06-.06A2 2 0 0119.73 6.1l-.06.06a1.65 1.65 0 00-.33 1.82v.16c.2.5.62.9 1.12 1.05.5.16.9.5 1.12 1.05z" stroke="#111" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </header>
+
+    <main class="content">
+      <button id="saveBtn" class="btn primary">Siteyi Kaydet</button>
+      <button id="deleteBtn" class="btn danger">Kaydı Sil</button>
+    </main>
   </div>
-  <button id="saveBtn" class="main-btn">Bu siteyi kaydet</button>
-  <button id="deleteBtn" class="main-btn delete">Kaydı sil</button>
-  <div id="modal" class="modal" style="display:none;">
-    <div class="modal-content">
-      <span id="modalMessage"></span>
-      <button id="closeModal" class="main-btn" style="margin-top:12px;">Kapat</button>
+
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-card">
+      <div id="modalMessage" class="modal-text"></div>
+      <div class="modal-actions">
+        <button id="closeModal" class="btn">Kapat</button>
+      </div>
     </div>
   </div>
+
   <script src="popup.js"></script>
 </body>
 </html>
