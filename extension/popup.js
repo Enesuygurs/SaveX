@@ -116,8 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) {
             showStatusMessage('Site kayıttan yüklendi', null, 0);
         }
-        // clear the flag so message shows only once
-        chrome.storage.local.remove(key);
+          // keep the loaded flag so the message persists across popup opens
       }
     });
     // check if a saved site exists for this URL to enable delete button
