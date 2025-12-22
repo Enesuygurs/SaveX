@@ -9,6 +9,27 @@ function showModal(message) {
   modal.setAttribute('aria-hidden', 'false');
 }
 
+function showStatusMessage(message, timeout = 5000) {
+  const el = document.getElementById('statusMessage');
+  if (!el) return;
+  el.textContent = message;
+  el.style.display = 'block';
+  el.setAttribute('aria-hidden', 'false');
+  if (timeout > 0) {
+    clearTimeout(showStatusMessage._timer);
+    showStatusMessage._timer = setTimeout(() => {
+      hideStatusMessage();
+    }, timeout);
+  }
+}
+
+function hideStatusMessage() {
+  const el = document.getElementById('statusMessage');
+  if (!el) return;
+  el.style.display = 'none';
+  el.setAttribute('aria-hidden', 'true');
+}
+
 document.getElementById('closeModal').addEventListener('click', () => {
   document.getElementById('modal').style.display = 'none';
 });
@@ -73,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // check if loaded from saved
     chrome.storage.local.get(key, (res) => {
       if (res && res[key]) {
-        showModal('Site kayıttan yüklendi');
+        showStatusMessage('Site kayıttan yüklendi', 6000);
         // clear the flag so message shows only once
         chrome.storage.local.remove(key);
       }
