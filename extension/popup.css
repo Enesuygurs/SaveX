@@ -82,6 +82,18 @@ html,body{
   gap:10px;
 }
 
+/* Inline status message shown above buttons */
+.status-message{
+  display:block;
+  padding:8px 10px;
+  border-radius:8px;
+  background: rgba(34,197,94,0.12); /* subtle green */
+  color: #065f46; /* dark green */
+  font-weight:600;
+  font-size:13px;
+  text-align:center;
+}
+
 .btn{
   width:100%;
   padding:10px 12px;
