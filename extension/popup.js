@@ -42,11 +42,15 @@ document.getElementById('closeModal').addEventListener('click', () => {
 });
 
 document.getElementById('saveBtn').addEventListener('click', async () => {
+  // hide any inline status message (e.g. "Bu site kaydedilmemiş")
+  hideStatusMessage();
   chrome.runtime.sendMessage({ action: 'save-current-site' });
   showModal('Kaydediliyor');
 });
 
 document.getElementById('deleteBtn').addEventListener('click', async () => {
+  // hide any inline status message (e.g. "Site kayıttan yüklendi")
+  hideStatusMessage();
   chrome.runtime.sendMessage({ action: 'delete-current-site' });
   showModal('Siliniyor');
 });
