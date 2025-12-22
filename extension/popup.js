@@ -6,6 +6,7 @@ function showModal(message) {
   const modalMessage = document.getElementById('modalMessage');
   modalMessage.textContent = message;
   modal.style.display = 'flex';
+  modal.setAttribute('aria-hidden', 'false');
 }
 
 document.getElementById('closeModal').addEventListener('click', () => {
@@ -46,4 +47,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       showModal(message.message || 'Bir hata oluştu');
     }
   }
+});
+
+// On popup open, check if current tab was loaded from saved data
+document.addEventListener('DOMContentLoaded', () => {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const tab = tabs && tabs[0];
+    if (!tab || !tab.url) return;
+    const key = 'loaded_from_saved_' + tab.url;
+    chrome.storage.local.get(key, (res) => {
+      if (res && res[key]) {
+        showModal('Site kayıttan yüklendi');
+        // clear the flag so message shows only once
+        chrome.storage.local.remove(key);
+      }
+    });
+  });
 });

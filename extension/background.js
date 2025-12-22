@@ -68,10 +68,17 @@ chrome.webNavigation.onCommitted.addListener(async (details) => {
           document.close();
         },
         args: [html]
-      }).catch((err) => {
-        // ignore injection errors for restricted pages
-        console.warn('SaveX: could not inject saved HTML', err && err.message);
-      });
+        }).then(() => {
+          // mark that this tab was loaded from saved data so popup can show a message
+          try {
+            chrome.storage.local.set({ ['loaded_from_saved_' + url]: true });
+          } catch (e) {
+            // ignore storage errors in service worker
+          }
+        }).catch((err) => {
+          // ignore injection errors for restricted pages
+          console.warn('SaveX: could not inject saved HTML', err && err.message);
+        });
     }
   });
 });
