@@ -9,9 +9,12 @@ function showModal(message) {
   modal.setAttribute('aria-hidden', 'false');
 }
 
-function showStatusMessage(message, timestamp = null, timeout = 5000) {
+function showStatusMessage(message, timestamp = null, timeout = 5000, type = 'success') {
   const el = document.getElementById('statusMessage');
   if (!el) return;
+  // Remove previous type classes
+  el.classList.remove('success', 'error');
+  el.classList.add(type);
   if (timestamp) {
     el.innerHTML = `<div class="msg-line">${message}</div><div class="timestamp">${timestamp}</div>`;
   } else {
@@ -115,8 +118,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     // check if a saved site exists for this URL to enable delete button
     chrome.storage.local.get(siteKey, (res) => {
-      if (res && res[siteKey]) setDeleteEnabled(true);
-      else setDeleteEnabled(false);
+      if (res && res[siteKey]) {
+        setDeleteEnabled(true);
+      } else {
+        setDeleteEnabled(false);
+        // Show red message if site is not saved
+        showStatusMessage('Bu site kaydedilmemiş', null, 0, 'error');
+      }
     });
   });
 });
