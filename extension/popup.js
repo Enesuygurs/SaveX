@@ -68,31 +68,28 @@ function setDeleteEnabled(enabled) {
 document.getElementById('settingsBtn').addEventListener('click', () => {
   const mainView = document.getElementById('mainView');
   const settingsView = document.getElementById('settingsView');
-  const backBtn = document.getElementById('backBtn');
   const titleEl = document.querySelector('.topbar .title');
-  if (!mainView || !settingsView || !backBtn || !titleEl) {
+  if (!mainView || !settingsView || !titleEl) {
     showModal('Ayarlar yakında!');
     return;
   }
-  mainView.style.display = 'none';
-  settingsView.style.display = 'block';
-  backBtn.style.display = 'inline-flex';
-  titleEl.textContent = 'Ayarlar';
-  // wire up export/import handlers (idempotent)
-  setupImportExportHandlers();
+  const showingSettings = settingsView.style.display === 'block';
+  if (showingSettings) {
+    // go back to main: remove inline display so CSS (.content) controls layout
+    settingsView.style.display = 'none';
+    mainView.style.display = '';
+    titleEl.textContent = 'SaveX';
+  } else {
+    // show settings view
+    mainView.style.display = 'none';
+    settingsView.style.display = 'block';
+    titleEl.textContent = 'SaveX';
+    // wire up export/import handlers (idempotent)
+    setupImportExportHandlers();
+  }
 });
 
-// Back button in topbar to return from settings to main view
-document.getElementById('backBtn').addEventListener('click', () => {
-  const mainView = document.getElementById('mainView');
-  const settingsView = document.getElementById('settingsView');
-  const backBtn = document.getElementById('backBtn');
-  const titleEl = document.querySelector('.topbar .title');
-  if (settingsView) settingsView.style.display = 'none';
-  if (mainView) mainView.style.display = 'block';
-  if (backBtn) backBtn.style.display = 'none';
-  if (titleEl) titleEl.textContent = 'SaveX';
-});
+// (no back button - settings toggles with the settings button)
  
 // Listen for background confirmations and update modal message
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
