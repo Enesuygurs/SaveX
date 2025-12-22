@@ -38,7 +38,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         chrome.runtime.sendMessage({ action: 'site-error', reason: 'unsupported_url', url: tab.url });
         return;
       }
-      chrome.storage.local.remove('site_' + tab.url, () => {
+      chrome.storage.local.remove(['site_' + tab.url, 'loaded_from_saved_' + tab.url], () => {
         if (chrome.runtime.lastError) {
           chrome.runtime.sendMessage({ action: 'site-error', reason: 'storage_error', message: chrome.runtime.lastError.message, url: tab.url });
         } else {
