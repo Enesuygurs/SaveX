@@ -18,8 +18,10 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
             return;
           }
           if (response && response.html) {
-            chrome.storage.local.set({ ['site_' + tab.url]: response.html }, () => {
-              chrome.runtime.sendMessage({ action: 'site-saved', url: tab.url });
+            const savedAt = new Date().toISOString();
+            const payload = { html: response.html, savedAt };
+            chrome.storage.local.set({ ['site_' + tab.url]: payload }, () => {
+              chrome.runtime.sendMessage({ action: 'site-saved', url: tab.url, savedAt });
             });
           } else {
             chrome.runtime.sendMessage({ action: 'site-error', reason: 'empty_response', url: tab.url });
@@ -58,7 +60,9 @@ chrome.webNavigation.onCommitted.addListener(async (details) => {
   // Only act on http(s) pages
   if (!/^https?:\/\//i.test(url)) return;
   chrome.storage.local.get('site_' + url, (result) => {
-    const html = result && result['site_' + url];
+    const saved = result && result['site_' + url];
+    // saved may be an object { html, savedAt } or a plain HTML string (backcompat)
+    const html = saved && saved.html ? saved.html : saved;
     if (html) {
       chrome.scripting.executeScript({
         target: { tabId: details.tabId },
@@ -71,7 +75,12 @@ chrome.webNavigation.onCommitted.addListener(async (details) => {
         }).then(() => {
           // mark that this tab was loaded from saved data so popup can show a message
           try {
-            chrome.storage.local.set({ ['loaded_from_saved_' + url]: true });
+            // read savedAt from storage and store it on the loaded flag
+            chrome.storage.local.get('site_' + url, (res) => {
+              const site = res && res['site_' + url];
+              const savedAt = site && site.savedAt ? site.savedAt : new Date().toISOString();
+              chrome.storage.local.set({ ['loaded_from_saved_' + url]: savedAt });
+            });
           } catch (e) {
             // ignore storage errors in service worker
           }
