@@ -69,14 +69,13 @@ html,body{
   align-items:center;
   justify-content:center;
 }
-.icon-btn svg{stroke:rgba(255,255,255,0.95)}
+.icon-btn svg{stroke:#ffffff; fill:none}
 .icon-btn:hover{background:rgba(255,255,255,0.06)}
 
 /* removed negative margin: icon now positioned by flex gap */
 /* ...existing code... */
 
 .content{
-  margin-top:12px;
   display:flex;
   flex-direction:column;
   gap:10px;
@@ -97,11 +96,11 @@ html,body{
 }
 .btn.primary:hover{filter:brightness(0.95)}
 .btn.danger{
-  background:transparent;
-  color:var(--danger);
-  border:1px solid rgba(239,68,68,0.15);
+  background:var(--danger);
+  color:#fff;
+  border:none;
 }
-.btn.danger:hover{background:rgba(239,68,68,0.06)}
+.btn.danger:hover{filter:brightness(0.95)}
 
 /* Modal */
 .modal{
