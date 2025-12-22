@@ -33,5 +33,17 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     showModal('Kaydedildi');
   } else if (message.action === 'site-deleted') {
     showModal('Silindi');
+  } else if (message.action === 'site-error') {
+    // Map common reasons to user-friendly messages
+    const reason = message.reason || '';
+    if (reason === 'unsupported_url') {
+      showModal('Bu sayfa kaydedilemez');
+    } else if (reason === 'no_content_script') {
+      showModal('Sayfa içeriğine erişilemiyor');
+    } else if (reason === 'storage_error') {
+      showModal('Depolama hatası');
+    } else {
+      showModal(message.message || 'Bir hata oluştu');
+    }
   }
 });
