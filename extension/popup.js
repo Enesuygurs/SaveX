@@ -38,7 +38,11 @@ function hideStatusMessage() {
 }
 
 document.getElementById('closeModal').addEventListener('click', () => {
-  document.getElementById('modal').style.display = 'none';
+  const modal = document.getElementById('modal');
+  if (modal) {
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden', 'true');
+  }
 });
 
 document.getElementById('saveBtn').addEventListener('click', async () => {
@@ -62,7 +66,32 @@ function setDeleteEnabled(enabled) {
 }
 
 document.getElementById('settingsBtn').addEventListener('click', () => {
-  showModal('Ayarlar yakında!');
+  const mainView = document.getElementById('mainView');
+  const settingsView = document.getElementById('settingsView');
+  const backBtn = document.getElementById('backBtn');
+  const titleEl = document.querySelector('.topbar .title');
+  if (!mainView || !settingsView || !backBtn || !titleEl) {
+    showModal('Ayarlar yakında!');
+    return;
+  }
+  mainView.style.display = 'none';
+  settingsView.style.display = 'block';
+  backBtn.style.display = 'inline-flex';
+  titleEl.textContent = 'Ayarlar';
+  // wire up export/import handlers (idempotent)
+  setupImportExportHandlers();
+});
+
+// Back button in topbar to return from settings to main view
+document.getElementById('backBtn').addEventListener('click', () => {
+  const mainView = document.getElementById('mainView');
+  const settingsView = document.getElementById('settingsView');
+  const backBtn = document.getElementById('backBtn');
+  const titleEl = document.querySelector('.topbar .title');
+  if (settingsView) settingsView.style.display = 'none';
+  if (mainView) mainView.style.display = 'block';
+  if (backBtn) backBtn.style.display = 'none';
+  if (titleEl) titleEl.textContent = 'SaveX';
 });
  
 // Listen for background confirmations and update modal message
@@ -92,6 +121,103 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
   }
 });
+
+// Setup import/export handlers used by settings
+function setupImportExportHandlers() {
+  const exportBtn = document.getElementById('exportBtn');
+  const importBtn = document.getElementById('importBtn');
+  const importFile = document.getElementById('importFile');
+  if (exportBtn && !exportBtn._wired) {
+    exportBtn.addEventListener('click', exportAll);
+    exportBtn._wired = true;
+  }
+  if (importBtn && !importBtn._wired) {
+    importBtn.addEventListener('click', () => {
+      if (importFile && importFile.files && importFile.files[0]) {
+        importAllFromFile(importFile.files[0]);
+      } else {
+        showModal('Lütfen bir JSON dosyası seçin');
+      }
+    });
+    importBtn._wired = true;
+  }
+}
+
+function exportAll() {
+  // gather all site_ keys and download as JSON
+  chrome.storage.local.get(null, (items) => {
+    if (chrome.runtime.lastError) {
+      showModal('Dışa aktarma sırasında hata');
+      return;
+    }
+    const exportObj = {};
+    for (const k in items) {
+      if (Object.prototype.hasOwnProperty.call(items, k) && k.startsWith('site_')) {
+        exportObj[k] = items[k];
+      }
+    }
+    if (Object.keys(exportObj).length === 0) {
+      showModal('Dışa aktarılacak kayıt bulunamadı');
+      return;
+    }
+    const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+    a.href = url;
+    a.download = `savex-export-${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    showModal('Dışa aktarma tamamlandı');
+  });
+}
+
+function importAllFromFile(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if (!parsed || typeof parsed !== 'object') throw new Error('Invalid JSON');
+      // Filter and prepare entries to set
+      const toSet = {};
+      for (const [k, v] of Object.entries(parsed)) {
+        if (k.startsWith('site_')) {
+          // basic validation: must be object with html or string
+          if (v && (v.html || typeof v === 'string')) {
+            toSet[k] = v;
+          }
+        } else {
+          // if key looks like url or raw, store as site_<key> if structure is valid
+          if (v && (v.html || typeof v === 'string')) {
+            toSet['site_' + k] = v;
+          }
+        }
+      }
+      if (Object.keys(toSet).length === 0) {
+        showModal('İçe aktarılacak geçerli kayıt yok');
+        return;
+      }
+      chrome.storage.local.set(toSet, () => {
+        if (chrome.runtime.lastError) {
+          showModal('İçe aktarma başarısız: ' + chrome.runtime.lastError.message);
+        } else {
+          showModal('İçe aktarma başarılı');
+          // clear file input
+          const importFile = document.getElementById('importFile');
+          if (importFile) importFile.value = '';
+        }
+      });
+    } catch (err) {
+      showModal('Dosya okunamadı: Geçersiz JSON');
+    }
+  };
+  reader.onerror = () => {
+    showModal('Dosya okunamadı');
+  };
+  reader.readAsText(file);
+}
 
 // On popup open, check if current tab was loaded from saved data
 document.addEventListener('DOMContentLoaded', () => {

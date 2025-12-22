@@ -8,6 +8,7 @@
 </head>
 <body>
   <header class="topbar">
+    <button id="backBtn" class="icon-btn" title="Geri" style="display:none; margin-right:8px;">◀</button>
     <div class="title">SaveX</div>
     <button id="settingsBtn" class="icon-btn" title="Ayarlar">
       <span class="icon">⚙</span>
@@ -15,10 +16,23 @@
   </header>
 
   <div class="container">
-    <main class="content">
+    <main id="mainView" class="content">
       <div id="statusMessage" class="status-message" aria-hidden="true" style="display:none;"></div>
       <button id="saveBtn" class="btn primary">Siteyi Kaydet</button>
       <button id="deleteBtn" class="btn danger">Kaydı Sil</button>
+    </main>
+
+    <main id="settingsView" class="content" style="display:none;">
+      <div class="title" style="font-size:16px; font-weight:700; margin-bottom:6px;">Ayarlar</div>
+      <p>Kayıtları dışa aktarın veya bir JSON dosyasından içe aktarın.</p>
+      <div class="settings-row">
+        <button id="exportBtn" class="btn">Tümünü Dışa Aktar</button>
+      </div>
+      <div class="settings-row">
+        <input id="importFile" type="file" accept="application/json" />
+        <button id="importBtn" class="btn">İçe Aktar</button>
+      </div>
+      <div class="settings-note">Not: İçeri aktarma yalnızca `site_` önekli kayıtları veya uygun nesneleri kabul eder.</div>
     </main>
   </div>
 
