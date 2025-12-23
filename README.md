@@ -15,10 +15,10 @@ A Chrome extension that saves websites and reopens them in their saved state.
 ### 🖼️ Screenshots
 
 #### Main Popup Interface
-
+<img width="320" height="201" alt="image" src="https://github.com/user-attachments/assets/eb60b846-cf73-4275-9da3-1bd236bb2b8d" />
 
 #### Settings View
-
+<img width="321" height="559" alt="image" src="https://github.com/user-attachments/assets/3b902d3c-9b93-48c6-9d44-91f7c9d02cda" />
 
 ### 💻 Installation
 
