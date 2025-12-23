@@ -209,6 +209,10 @@ html,body{
   padding:16px;
   transition:box-shadow 0.2s;
 }
+.settings-card{
+  margin-bottom:10px; /* small space between cards */
+}
+.settings-card:last-child{margin-bottom:0}
 .settings-card:hover{
   box-shadow:0 2px 8px rgba(37,99,235,0.08);
   border-color:#d1d5db;
