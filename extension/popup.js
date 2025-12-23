@@ -39,6 +39,8 @@ function hideStatusMessage() {
 
 document.getElementById('closeModal').addEventListener('click', () => {
   const modal = document.getElementById('modal');
+  const closeBtn = document.getElementById('closeModal');
+  if (closeBtn) closeBtn.blur(); // remove focus from button before hiding modal
   if (modal) {
     modal.style.display = 'none';
     modal.setAttribute('aria-hidden', 'true');
