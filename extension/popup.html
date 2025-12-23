@@ -38,7 +38,13 @@
         </div>
         <p class="settings-description">Daha önce kaydedilmiş siteleri geri yükle.</p>
         <div class="settings-import-group">
-          <input id="importFile" type="file" accept="application/json" class="settings-file-input" />
+          <div class="file-input-wrapper">
+            <input id="importFile" type="file" accept="application/json" class="settings-file-input" />
+            <label for="importFile" class="file-input-label">
+              <span class="file-input-icon">📁</span>
+              <span class="file-input-text">Dosya Seç</span>
+            </label>
+          </div>
           <button id="importBtn" class="btn primary settings-action-btn">İçe Aktar</button>
         </div>
       </div>
