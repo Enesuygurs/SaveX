@@ -73,13 +73,10 @@ html,body{
 .icon-btn .icon{color:#ffffff; font-size:18px; line-height:1}
 .icon-btn:hover{background:rgba(255,255,255,0.06)}
 
-/* removed negative margin: icon now positioned by flex gap */
-/* ...existing code... */
-
 .content{
   display:flex;
   flex-direction:column;
-  gap:10px;
+  gap:6px;
 }
 
 /* Inline status message shown above buttons */
@@ -92,6 +89,7 @@ html,body{
   font-weight:600;
   font-size:13px;
   text-align:center;
+  margin-bottom: 8px;
 }
 
 .status-message.error{
@@ -116,7 +114,7 @@ html,body{
   padding:10px 12px;
   border-radius:8px;
   border:none;
-  font-size:14px;
+  font-size:13px;
   cursor:pointer;
   box-shadow:none;
 }
