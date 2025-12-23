@@ -69,7 +69,8 @@ document.getElementById('settingsBtn').addEventListener('click', () => {
   const mainView = document.getElementById('mainView');
   const settingsView = document.getElementById('settingsView');
   const titleEl = document.querySelector('.topbar .title');
-  if (!mainView || !settingsView || !titleEl) {
+  const iconEl = document.querySelector('#settingsBtn .icon');
+  if (!mainView || !settingsView || !titleEl || !iconEl) {
     showModal('Ayarlar yakında!');
     return;
   }
@@ -79,11 +80,13 @@ document.getElementById('settingsBtn').addEventListener('click', () => {
     settingsView.style.display = 'none';
     mainView.style.display = '';
     titleEl.textContent = 'SaveX';
+    iconEl.textContent = '⚙'; // change icon back to settings gear
   } else {
     // show settings view
     mainView.style.display = 'none';
     settingsView.style.display = 'block';
     titleEl.textContent = 'SaveX';
+    iconEl.textContent = '←'; // change icon to back arrow
     // wire up export/import handlers (idempotent)
     setupImportExportHandlers();
   }
