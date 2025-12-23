@@ -1,6 +1,6 @@
 # SaveX
 
-A Chrome extension that saves websites and allows you to reopen them in their saved state.
+A Chrome extension that saves websites and reopens them in their saved state.
 
 ### ✨ Features
 
@@ -30,7 +30,7 @@ A Chrome extension that saves websites and allows you to reopen them in their sa
 ### 🚀 Usage
 
 1. Click the SaveX icon in the Chrome toolbar
-2. Click "Siteyi Kaydet" to save the current page
+2. Click "Save Site" to save the current page
 3. To reopen a saved page, navigate to the saved URL - the extension will automatically load the saved content
 4. Access settings by clicking the gear icon to export/import data or delete all records
 

@@ -51,14 +51,14 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
   // hide any inline status message (e.g. "Bu site kaydedilmemiş")
   hideStatusMessage();
   chrome.runtime.sendMessage({ action: 'save-current-site' });
-  showModal('Kaydediliyor');
+  showModal('Saving...');
 });
 
 document.getElementById('deleteBtn').addEventListener('click', async () => {
   // hide any inline status message (e.g. "Site kayıttan yüklendi")
   hideStatusMessage();
   chrome.runtime.sendMessage({ action: 'delete-current-site' });
-  showModal('Siliniyor');
+  showModal('Deleting...');
 });
 
 function setDeleteEnabled(enabled) {
@@ -111,13 +111,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // Map common reasons to user-friendly messages
     const reason = message.reason || '';
     if (reason === 'unsupported_url') {
-      showModal('Bu sayfa kaydedilemez');
+      showModal('This page cannot be saved');
     } else if (reason === 'no_content_script') {
-      showModal('Sayfa içeriğine erişilemiyor');
+      showModal('Cannot access page content');
     } else if (reason === 'storage_error') {
-      showModal('Depolama hatası');
+      showModal('Storage error');
     } else {
-      showModal(message.message || 'Bir hata oluştu');
+      showModal(message.message || 'An error occurred');
     }
     // if the error relates to unsupported url or storage, ensure delete disabled
     if (message.reason === 'unsupported_url' || message.reason === 'storage_error') {
@@ -170,7 +170,7 @@ function exportAll() {
   // gather all site_ keys and download as JSON
   chrome.storage.local.get(null, (items) => {
     if (chrome.runtime.lastError) {
-      showModal('Dışa aktarma sırasında hata');
+      showModal('Error during export');
       return;
     }
     const exportObj = {};
@@ -193,19 +193,19 @@ function exportAll() {
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
-    showModal('Dışa aktarma tamamlandı');
+    showModal('Export completed');
   });
 }
 
 function deleteAllRecords() {
   // confirm with user
-  const ok = confirm('Tüm kayıtlar kalıcı olarak silinecek. Devam edilsin mi?');
+  const ok = confirm('All records will be permanently deleted. Continue?');
   if (!ok) return;
-  showModal('Tüm kayıtlar siliniyor...');
+  showModal('Deleting all records...');
   // collect all keys that are site_ or loaded_from_saved_
   chrome.storage.local.get(null, (items) => {
     if (chrome.runtime.lastError) {
-      showModal('Silme sırasında hata: ' + chrome.runtime.lastError.message);
+      showModal('Error during deletion: ' + chrome.runtime.lastError.message);
       return;
     }
     const keysToRemove = [];
@@ -214,14 +214,14 @@ function deleteAllRecords() {
       if (k.startsWith('site_') || k.startsWith('loaded_from_saved_')) keysToRemove.push(k);
     }
     if (keysToRemove.length === 0) {
-      showModal('Silinecek kayıt bulunamadı');
+      showModal('No records found to delete');
       return;
     }
     chrome.storage.local.remove(keysToRemove, () => {
       if (chrome.runtime.lastError) {
-        showModal('Silme başarısız: ' + chrome.runtime.lastError.message);
+        showModal('Deletion failed: ' + chrome.runtime.lastError.message);
       } else {
-        showModal('Tüm kayıtlar silindi');
+        showModal('All records deleted');
         // update UI state
         setDeleteEnabled(false);
       }
@@ -251,21 +251,21 @@ function importAllFromFile(file) {
         }
       }
       if (Object.keys(toSet).length === 0) {
-        showModal('İçe aktarılacak geçerli kayıt yok');
+        showModal('No valid records to import');
         return;
       }
       chrome.storage.local.set(toSet, () => {
         if (chrome.runtime.lastError) {
-          showModal('İçe aktarma başarısız: ' + chrome.runtime.lastError.message);
+          showModal('Import failed: ' + chrome.runtime.lastError.message);
         } else {
-          showModal('İçe aktarma başarılı');
+          showModal('Import successful');
           // clear file input
           const importFile = document.getElementById('importFile');
           if (importFile) importFile.value = '';
         }
       });
     } catch (err) {
-      showModal('Dosya okunamadı: Geçersiz JSON');
+      showModal('File could not be read: Invalid JSON');
     }
   };
   reader.onerror = () => {

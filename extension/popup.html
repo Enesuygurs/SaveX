@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>SaveX</title>
@@ -9,7 +9,7 @@
 <body>
   <header class="topbar">
     <div class="title">SaveX</div>
-    <button id="settingsBtn" class="icon-btn" title="Ayarlar">
+    <button id="settingsBtn" class="icon-btn" title="Settings">
       <span class="icon">⚙</span>
     </button>
   </header>
@@ -17,50 +17,50 @@
   <div class="container">
     <main id="mainView" class="content">
       <div id="statusMessage" class="status-message" aria-hidden="true" style="display:none;"></div>
-      <button id="saveBtn" class="btn primary">Siteyi Kaydet</button>
-      <button id="deleteBtn" class="btn danger">Kaydı Sil</button>
+      <button id="saveBtn" class="btn primary">Save Site</button>
+      <button id="deleteBtn" class="btn danger">Delete Record</button>
     </main>
 
     <main id="settingsView" class="content settings-main" style="display:none;">
       <div class="settings-card">
         <div class="settings-card-header">
           <span class="settings-icon">📤</span>
-          <h3>Dışa Aktar</h3>
+          <h3>Export</h3>
         </div>
-        <p class="settings-description">Tüm kaydedilmiş siteleri JSON dosyası olarak indir.</p>
-        <button id="exportBtn" class="btn primary settings-action-btn">Dışa Aktar</button>
+        <p class="settings-description">Download all saved sites as a JSON file.</p>
+        <button id="exportBtn" class="btn primary settings-action-btn">Export</button>
       </div>
 
       <div class="settings-card">
         <div class="settings-card-header">
           <span class="settings-icon">📥</span>
-          <h3>İçe Aktar</h3>
+          <h3>Import</h3>
         </div>
-        <p class="settings-description">Daha önce kaydedilmiş siteleri geri yükle.</p>
+        <p class="settings-description">Restore previously saved sites.</p>
         <div class="settings-import-group">
           <div class="file-input-wrapper">
             <input id="importFile" type="file" accept="application/json" class="settings-file-input" />
             <label for="importFile" class="file-input-label">
               <span class="file-input-icon">📁</span>
-              <span class="file-input-text">Dosya Seç</span>
+              <span class="file-input-text">Select File</span>
             </label>
           </div>
-          <button id="importBtn" class="btn primary settings-action-btn">İçe Aktar</button>
+          <button id="importBtn" class="btn primary settings-action-btn">Import</button>
         </div>
       </div>
 
       <div class="settings-card">
         <div class="settings-card-header">
           <span class="settings-icon">🗑️</span>
-          <h3>Tüm Kayıtları Sil</h3>
+          <h3>Delete All Records</h3>
         </div>
-        <p class="settings-description">Tüm kaydedilmiş siteleri kalıcı olarak siler. Bu işlem geri alınamaz.</p>
-        <button id="deleteAllBtn" class="btn danger settings-action-btn">Tümünü Sil</button>
+        <p class="settings-description">Permanently deletes all saved sites. This action cannot be undone.</p>
+        <button id="deleteAllBtn" class="btn danger settings-action-btn">Delete All</button>
       </div>
 
       <div class="settings-info">
         <span class="info-icon">ℹ</span>
-        <p>İçeri aktarma yalnızca geçerli SaveX kayıtlarını kabul eder.</p>
+        <p>Import only accepts valid SaveX records.</p>
       </div>
     </main>
   </div>
@@ -69,7 +69,7 @@
     <div class="modal-card">
       <div id="modalMessage" class="modal-text"></div>
       <div class="modal-actions">
-        <button id="closeModal" class="btn">Kapat</button>
+        <button id="closeModal" class="btn">Close</button>
       </div>
     </div>
   </div>
