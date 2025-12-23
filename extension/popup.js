@@ -81,12 +81,14 @@ document.getElementById('settingsBtn').addEventListener('click', () => {
     mainView.style.display = '';
     titleEl.textContent = 'SaveX';
     iconEl.textContent = '⚙'; // change icon back to settings gear
+    iconEl.style.color = 'white';
   } else {
     // show settings view
     mainView.style.display = 'none';
     settingsView.style.display = 'block';
     titleEl.textContent = 'SaveX';
-    iconEl.textContent = '←'; // change icon to back arrow
+    iconEl.textContent = '◀'; // left arrow (text, renders white)
+    iconEl.style.color = 'white';
     // wire up export/import handlers (idempotent)
     setupImportExportHandlers();
   }
