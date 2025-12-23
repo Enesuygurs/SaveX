@@ -91,3 +91,50 @@ chrome.webNavigation.onCommitted.addListener(async (details) => {
     }
   });
 });
+
+// Create context menu on install
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.contextMenus.create({
+    id: 'savex-save-page',
+    title: 'SaveX ile kaydet',
+    contexts: ['page']
+  });
+});
+
+// Handle context menu clicks
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  if (info.menuItemId === 'savex-save-page' && tab && tab.id) {
+    // Directly trigger save logic for the tab
+    saveCurrentSiteForTab(tab);
+  }
+});
+
+// Function to save current site for a given tab
+function saveCurrentSiteForTab(tab) {
+  if (!tab || !tab.id || !tab.url) return;
+  // Only allow http/https pages
+  if (!/^https?:\/\//i.test(tab.url)) {
+    chrome.runtime.sendMessage({ action: 'site-error', reason: 'unsupported_url', url: tab.url });
+    return;
+  }
+  chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    files: ['content.js']
+  }, () => {
+    chrome.tabs.sendMessage(tab.id, { action: 'get-page-content' }, (response) => {
+      if (chrome.runtime.lastError) {
+        chrome.runtime.sendMessage({ action: 'site-error', reason: 'no_content_script', message: chrome.runtime.lastError.message, url: tab.url });
+        return;
+      }
+      if (response && response.html) {
+        const savedAt = new Date().toISOString();
+        const payload = { html: response.html, savedAt };
+        chrome.storage.local.set({ ['site_' + tab.url]: payload }, () => {
+          chrome.runtime.sendMessage({ action: 'site-saved', url: tab.url, savedAt });
+        });
+      } else {
+        chrome.runtime.sendMessage({ action: 'site-error', reason: 'empty_response', url: tab.url });
+      }
+    });
+  });
+}
