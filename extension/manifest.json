@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "SaveX",
   "version": "1.0",
-  "description": "Siteleri kaydedip, kaydedilmiş haliyle tekrar açan bir Chrome eklentisi.",
+  "description": "A Chrome extension that saves websites and reopens them in their saved state.",
   "permissions": [
     "storage",
     "scripting",
