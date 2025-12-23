@@ -123,6 +123,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 function setupImportExportHandlers() {
   const exportBtn = document.getElementById('exportBtn');
   const importBtn = document.getElementById('importBtn');
+  const deleteAllBtn = document.getElementById('deleteAllBtn');
   const importFile = document.getElementById('importFile');
   if (exportBtn && !exportBtn._wired) {
     exportBtn.addEventListener('click', exportAll);
@@ -137,6 +138,10 @@ function setupImportExportHandlers() {
       }
     });
     importBtn._wired = true;
+  }
+  if (deleteAllBtn && !deleteAllBtn._wired) {
+    deleteAllBtn.addEventListener('click', deleteAllRecords);
+    deleteAllBtn._wired = true;
   }
 }
 
@@ -168,6 +173,38 @@ function exportAll() {
     a.remove();
     URL.revokeObjectURL(url);
     showModal('Dışa aktarma tamamlandı');
+  });
+}
+
+function deleteAllRecords() {
+  // confirm with user
+  const ok = confirm('Tüm kayıtlar kalıcı olarak silinecek. Devam edilsin mi?');
+  if (!ok) return;
+  showModal('Tüm kayıtlar siliniyor...');
+  // collect all keys that are site_ or loaded_from_saved_
+  chrome.storage.local.get(null, (items) => {
+    if (chrome.runtime.lastError) {
+      showModal('Silme sırasında hata: ' + chrome.runtime.lastError.message);
+      return;
+    }
+    const keysToRemove = [];
+    for (const k in items) {
+      if (!Object.prototype.hasOwnProperty.call(items, k)) continue;
+      if (k.startsWith('site_') || k.startsWith('loaded_from_saved_')) keysToRemove.push(k);
+    }
+    if (keysToRemove.length === 0) {
+      showModal('Silinecek kayıt bulunamadı');
+      return;
+    }
+    chrome.storage.local.remove(keysToRemove, () => {
+      if (chrome.runtime.lastError) {
+        showModal('Silme başarısız: ' + chrome.runtime.lastError.message);
+      } else {
+        showModal('Tüm kayıtlar silindi');
+        // update UI state
+        setDeleteEnabled(false);
+      }
+    });
   });
 }
 
