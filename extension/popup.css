@@ -196,32 +196,106 @@ html,body{
   margin:0 0 8px 0;
   font-size:16px;
 }
-.settings-row{
-  margin-top:10px;
-  display:flex;
-  gap:8px;
-  align-items:center;
-}
-.settings-row input[type="file"]{
-  flex:1;
-  min-width:0; /* allow shrinking inside flex container */
-}
-.settings-row .btn{
-  width: auto; /* don't force full-width buttons inside horizontal rows */
-  padding:8px 10px;
-  flex: 0 0 auto;
+/* Settings view improvements */
+.settings-main{
+  gap:16px;
+  padding-top:8px;
 }
 
-/* Responsive: stack file input and button on narrow popups */
-@media (max-width:360px){
-  .settings-row{
-    flex-direction:column;
-    align-items:stretch;
-  }
-  .settings-row .btn{width:100%;}
+.settings-card{
+  background:#f9fafb;
+  border:1px solid #e5e7eb;
+  border-radius:10px;
+  padding:16px;
+  transition:box-shadow 0.2s;
 }
-.settings-note{
-  margin-top:10px;
+.settings-card:hover{
+  box-shadow:0 2px 8px rgba(37,99,235,0.08);
+  border-color:#d1d5db;
+}
+
+.settings-card-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:8px;
+}
+.settings-icon{
+  font-size:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.settings-card h3{
+  margin:0;
+  font-size:14px;
+  font-weight:700;
+  color:var(--text);
+}
+
+.settings-description{
+  margin:0 0 12px 0;
+  font-size:13px;
+  color:#6b7280;
+  line-height:1.4;
+}
+
+.settings-action-btn{
+  width:100%;
+  padding:8px 10px;
+  font-size:13px;
+  font-weight:600;
+  min-height:34px;
+  border-radius:8px;
+}
+
+.settings-import-group{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  align-items:stretch;
+}
+
+.settings-file-input{
+  flex:1;
   font-size:12px;
-  color:rgba(100,100,100,0.9);
+  padding:6px 8px;
+  border:1px solid #e5e7eb;
+  border-radius:6px;
+  cursor:pointer;
+}
+.settings-file-input:focus{
+  outline:none;
+  border-color:var(--primary);
+  box-shadow:0 0 0 2px rgba(37,99,235,0.1);
+}
+
+#importBtn{
+  flex:0 0 auto;
+  padding:8px 12px;
+  width:100%;
+  font-size:13px;
+}
+
+.settings-info{
+  background:#fef3c7;
+  border-left:4px solid #fbbf24;
+  border-radius:6px;
+  padding:12px;
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  margin-top:12px;
+}
+.info-icon{
+  flex-shrink:0;
+  font-size:18px;
+  font-weight:bold;
+  color:#92400e;
+}
+.settings-info p{
+  margin:0;
+  font-size:12px;
+  color:#78350f;
+  line-height:1.4;
 }

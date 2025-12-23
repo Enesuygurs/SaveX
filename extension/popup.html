@@ -21,16 +21,32 @@
       <button id="deleteBtn" class="btn danger">Kaydı Sil</button>
     </main>
 
-    <main id="settingsView" class="content" style="display:none;">
-      <p>Kayıtları dışa aktarın veya bir JSON dosyasından içe aktarın.</p>
-      <div class="settings-row">
-        <button id="exportBtn" class="btn">Tümünü Dışa Aktar</button>
+    <main id="settingsView" class="content settings-main" style="display:none;">
+      <div class="settings-card">
+        <div class="settings-card-header">
+          <span class="settings-icon">📤</span>
+          <h3>Dışa Aktar</h3>
+        </div>
+        <p class="settings-description">Tüm kaydedilmiş siteleri JSON dosyası olarak indir.</p>
+        <button id="exportBtn" class="btn primary settings-action-btn">Dışa Aktar</button>
       </div>
-      <div class="settings-row">
-        <input id="importFile" type="file" accept="application/json" />
-        <button id="importBtn" class="btn">İçe Aktar</button>
+
+      <div class="settings-card">
+        <div class="settings-card-header">
+          <span class="settings-icon">📥</span>
+          <h3>İçe Aktar</h3>
+        </div>
+        <p class="settings-description">Daha önce kaydedilmiş siteleri geri yükle.</p>
+        <div class="settings-import-group">
+          <input id="importFile" type="file" accept="application/json" class="settings-file-input" />
+          <button id="importBtn" class="btn primary settings-action-btn">İçe Aktar</button>
+        </div>
       </div>
-      <div class="settings-note">Not: İçeri aktarma yalnızca `site_` önekli kayıtları veya uygun nesneleri kabul eder.</div>
+
+      <div class="settings-info">
+        <span class="info-icon">ℹ</span>
+        <p>İçeri aktarma yalnızca geçerli SaveX kayıtlarını kabul eder.</p>
+      </div>
     </main>
   </div>
 
