@@ -206,11 +206,9 @@ html,body{
   background:#f9fafb;
   border:1px solid #e5e7eb;
   border-radius:10px;
-  padding:16px;
+  padding:12px;
   transition:box-shadow 0.2s;
-}
-.settings-card{
-  margin-bottom:10px; /* small space between cards */
+  margin-bottom:8px; /* small space between cards */
 }
 .settings-card:last-child{margin-bottom:0}
 .settings-card:hover{
@@ -221,27 +219,27 @@ html,body{
 .settings-card-header{
   display:flex;
   align-items:center;
-  gap:10px;
-  margin-bottom:8px;
+  gap:8px;
+  margin-bottom:6px;
 }
 .settings-icon{
-  font-size:24px;
+  font-size:16px;
   display:flex;
   align-items:center;
   justify-content:center;
 }
 .settings-card h3{
   margin:0;
-  font-size:14px;
+  font-size:13px;
   font-weight:700;
   color:var(--text);
 }
 
 .settings-description{
-  margin:0 0 12px 0;
-  font-size:13px;
+  margin:0 0 10px 0;
+  font-size:12px;
   color:#6b7280;
-  line-height:1.4;
+  line-height:1.35;
 }
 
 .settings-action-btn{
