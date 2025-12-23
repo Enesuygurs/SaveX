@@ -48,14 +48,14 @@ document.getElementById('closeModal').addEventListener('click', () => {
 });
 
 document.getElementById('saveBtn').addEventListener('click', async () => {
-  // hide any inline status message (e.g. "Bu site kaydedilmemiş")
+  // hide any inline status message (e.g. "This site is not saved")
   hideStatusMessage();
   chrome.runtime.sendMessage({ action: 'save-current-site' });
   showModal('Saving...');
 });
 
 document.getElementById('deleteBtn').addEventListener('click', async () => {
-  // hide any inline status message (e.g. "Site kayıttan yüklendi")
+  // hide any inline status message (e.g. "Site loaded from record")
   hideStatusMessage();
   chrome.runtime.sendMessage({ action: 'delete-current-site' });
   showModal('Deleting...');
@@ -73,7 +73,7 @@ document.getElementById('settingsBtn').addEventListener('click', () => {
   const titleEl = document.querySelector('.topbar .title');
   const iconEl = document.querySelector('#settingsBtn .icon');
   if (!mainView || !settingsView || !titleEl || !iconEl) {
-    showModal('Ayarlar yakında!');
+    showModal('Settings coming soon!');
     return;
   }
   const showingSettings = settingsView.style.display === 'block';
@@ -141,7 +141,7 @@ function setupImportExportHandlers() {
       if (importFile && importFile.files && importFile.files[0]) {
         importAllFromFile(importFile.files[0]);
       } else {
-        showModal('Lütfen bir JSON dosyası seçin');
+        showModal('Please select a JSON file');
       }
     });
     importBtn._wired = true;
@@ -156,9 +156,9 @@ function setupImportExportHandlers() {
       const textEl = document.querySelector('.file-input-text');
       if (textEl) {
         if (importFile.files && importFile.files[0]) {
-          textEl.textContent = 'Dosya seçildi';
+          textEl.textContent = 'File selected';
         } else {
-          textEl.textContent = 'Dosya Seç';
+          textEl.textContent = 'Select File';
         }
       }
     });
@@ -180,7 +180,7 @@ function exportAll() {
       }
     }
     if (Object.keys(exportObj).length === 0) {
-      showModal('Dışa aktarılacak kayıt bulunamadı');
+      showModal('No records found to export');
       return;
     }
     const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
@@ -269,7 +269,7 @@ function importAllFromFile(file) {
     }
   };
   reader.onerror = () => {
-    showModal('Dosya okunamadı');
+    showModal('File could not be read');
   };
   reader.readAsText(file);
 }
@@ -293,9 +293,9 @@ document.addEventListener('DOMContentLoaded', () => {
           const pad = (n) => String(n).padStart(2, '0');
             const formatted = `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
             // show message with timestamp on next line and keep it persistent (timeout=0)
-            showStatusMessage('Site kayıttan yüklendi', `${formatted}`, 0);
+            showStatusMessage('Site loaded from record', `${formatted}`, 0);
         } catch (e) {
-            showStatusMessage('Site kayıttan yüklendi', null, 0);
+            showStatusMessage('Site loaded from record', null, 0);
         }
           // keep the loaded flag so the message persists across popup opens
       }
@@ -307,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         setDeleteEnabled(false);
         // Show red message if site is not saved
-        showStatusMessage('Bu site kaydedilmemiş', null, 0, 'error');
+        showStatusMessage('This site is not saved', null, 0, 'error');
       }
     });
   });
