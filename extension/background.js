@@ -114,7 +114,7 @@ function saveCurrentSiteForTab(tab) {
   if (!tab || !tab.id || !tab.url) return;
   // Only allow http/https pages
   if (!/^https?:\/\//i.test(tab.url)) {
-    chrome.runtime.sendMessage({ action: 'site-error', reason: 'unsupported_url', url: tab.url });
+    console.log('SaveX: Unsupported URL:', tab.url);
     return;
   }
   chrome.scripting.executeScript({
@@ -123,17 +123,17 @@ function saveCurrentSiteForTab(tab) {
   }, () => {
     chrome.tabs.sendMessage(tab.id, { action: 'get-page-content' }, (response) => {
       if (chrome.runtime.lastError) {
-        chrome.runtime.sendMessage({ action: 'site-error', reason: 'no_content_script', message: chrome.runtime.lastError.message, url: tab.url });
+        console.log('SaveX: Content script error:', chrome.runtime.lastError.message, 'for URL:', tab.url);
         return;
       }
       if (response && response.html) {
         const savedAt = new Date().toISOString();
         const payload = { html: response.html, savedAt };
         chrome.storage.local.set({ ['site_' + tab.url]: payload }, () => {
-          chrome.runtime.sendMessage({ action: 'site-saved', url: tab.url, savedAt });
+          console.log('SaveX: Site saved successfully:', tab.url, 'at', savedAt);
         });
       } else {
-        chrome.runtime.sendMessage({ action: 'site-error', reason: 'empty_response', url: tab.url });
+        console.log('SaveX: Empty response from content script for URL:', tab.url);
       }
     });
   });
