@@ -148,6 +148,20 @@ function setupImportExportHandlers() {
     deleteAllBtn.addEventListener('click', deleteAllRecords);
     deleteAllBtn._wired = true;
   }
+  // wire file input change event to update label text
+  if (importFile && !importFile._wired) {
+    importFile.addEventListener('change', () => {
+      const textEl = document.querySelector('.file-input-text');
+      if (textEl) {
+        if (importFile.files && importFile.files[0]) {
+          textEl.textContent = 'Dosya seçildi';
+        } else {
+          textEl.textContent = 'Dosya Seç';
+        }
+      }
+    });
+    importFile._wired = true;
+  }
 }
 
 function exportAll() {
